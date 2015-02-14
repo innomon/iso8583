@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ns0:Iso8583 xmlns:ns0='http://in.org.mpf/iso8583/v01' >
+<ns0:MTI>0910</ns0:MTI>
+<ns0:messageAuthCodeField>1234</ns0:messageAuthCodeField>
+</ns0:Iso8583>

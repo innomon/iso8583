@@ -1,0 +1,5 @@
+# Refer to page 28 of http://www.mpf.org.in/pdf/MPFI_Interop_Std_V1.A.pdf 
+# MTI 0810 , Admin Message
+# fields 1, 7, 11, 15, 32,39, 64, 70, 128
+MTI=0810
+

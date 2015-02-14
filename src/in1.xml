@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ab:InIso8583   xmlns:ab='http://in.innomon/iso8583/v01' >
+    <ab:MTI>0910</ab:MTI>
+    <ab:messageAuthCodeField>123</ab:messageAuthCodeField>
+    <ab:primaryAccountNumber>345</ab:primaryAccountNumber>
+    <ab:processingCode>234</ab:processingCode>
+    <ab:transactionAmount>333</ab:transactionAmount>
+    <ab:reconciliationAmount>567</ab:reconciliationAmount>
+    <ab:cardHolderBillingAmount>3456</ab:cardHolderBillingAmount>
+</ab:InIso8583>

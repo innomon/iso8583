@@ -1,0 +1,32 @@
+# Refer to page 28 of http://www.mpf.org.in/pdf/MPFI_Interop_Std_V1.A.pdf 
+# MTI 0800 , Admin Message
+# fields 1, 7, 11, 15, 32, 48, 64, 70, 128
+MTI=0800
+# field name="transmissionDateTime" offset="7" format="MMDDhhmmss" attr="NUM" len="10
+transmissionDateTime=0618091023
+
+# field name="systemTraceAuditNumber" offset="11" format="FIXED" attr="NUM" len="6"
+systemTraceAuditNumber=123456
+
+#field name="dateSettlement" offset="15" format="YYMM" attr="NUM" len="4"
+dateSettlement=1106
+
+#field name="acquirerInstitutionIdentificationCode" offset="32" format="LLVAR" attr="NUM" len="11"
+acquirerInstitutionIdentificationCode=110002043
+
+#field name="privateAdditionalData" offset="48" format="LLLVAR" attr="ALNUMSPECIAL" len="999"
+privateAdditionalData=A12345678B89765432
+
+#field name="messageAuthCodeField" offset="64" format="FIXED" attr="BIN" len="8"
+messageAuthCodeField=ABCDEF0123407879
+
+#field name="authAgentInstitutionCountryCode" offset="70" format="FIXED" attr="NUM" len="3"
+authAgentInstitutionCountryCode=091
+
+#field name="messageAuthCodeField2" offset="128" format="FIXED" attr="BIN" len="8" 
+messageAuthCodeField2=C0FFEE1234607080
+#------------------ End Of Message ------------------
+
+
+
+

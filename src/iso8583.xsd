@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2008-2011 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+*****************************
+ Author: Ashish Banerjee 
+ Version: 15Jan11, v0.1
+*****************************
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:iso8583="http://www.ashishbanerjee.com/fts/iso8583"
+            targetNamespace="http://www.ashishbanerjee.com/fts/iso8583"
+            elementFormDefault="qualified">
+  <xsd:simpleType name="SingleDigitType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:totalDigits value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="BitMapType">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="HeaderVersionNumberType">
+    <xsd:choice>
+      <xsd:element name="version87" type="iso8583:SingleDigitType" fixed="0"/>
+      <xsd:element name="version93" type="iso8583:SingleDigitType" fixed="1"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="HeaderMessageClassType">
+    <xsd:choice>
+      <xsd:element name="authorization" type="iso8583:SingleDigitType"
+                   fixed="1"/>
+      <xsd:element name="financial" type="iso8583:SingleDigitType" fixed="2"/>
+      <xsd:element name="fileAction" type="iso8583:SingleDigitType" fixed="3"/>
+      <xsd:element name="reversal" type="iso8583:SingleDigitType" fixed="4"/>
+      <xsd:element name="chargeBack" type="iso8583:SingleDigitType" fixed="4"/>
+      <xsd:element name="reconciliation" type="iso8583:SingleDigitType"
+                   fixed="5"/>
+      <xsd:element name="administrative" type="iso8583:SingleDigitType"
+                   fixed="6"/>
+      <xsd:element name="feeCollection" type="iso8583:SingleDigitType"
+                   fixed="7"/>
+      <xsd:element name="networkManagement" type="iso8583:SingleDigitType"
+                   fixed="8"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="HeaderMessageFunctionType">
+    <xsd:choice>
+      <xsd:element name="request" type="iso8583:SingleDigitType" fixed="0"/>
+      <xsd:element name="requestResponse" type="iso8583:SingleDigitType"
+                   fixed="1"/>
+      <xsd:element name="advice" type="iso8583:SingleDigitType" fixed="2"/>
+      <xsd:element name="adviceResponse" type="iso8583:SingleDigitType"
+                   fixed="3"/>
+      <xsd:element name="notification" type="iso8583:SingleDigitType"
+                   fixed="4"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="HeaderTransactionOrignatorType">
+    <xsd:choice>
+      <xsd:element name="acquirer" type="iso8583:SingleDigitType" fixed="0"/>
+      <xsd:element name="acquirerRepeat" type="iso8583:SingleDigitType"
+                   fixed="1"/>
+      <xsd:element name="cardIssuer" type="iso8583:SingleDigitType" fixed="2"/>
+      <xsd:element name="cardIssuerRepeat" type="iso8583:SingleDigitType"
+                   fixed="3"/>
+      <xsd:element name="other" type="iso8583:SingleDigitType" fixed="4"/>
+      <xsd:element name="otherRepeat" type="iso8583:SingleDigitType" fixed="5"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="HeaderType">
+    <xsd:sequence>
+      <xsd:element name="version" type="iso8583:HeaderVersionNumberType"/>
+      <xsd:element name="messageClass" type="iso8583:HeaderMessageClassType"/>
+      <xsd:element name="messageFunction"
+                   type="iso8583:HeaderMessageFunctionType"/>
+      <xsd:element name="transactionOriginator"
+                   type="iso8583:HeaderTransactionOrignatorType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="AccountNumberType">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="19"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ExtendedAccountNumberType">
+    <xsd:restriction base="xsd:string">
+      <xsd:minLength value="1"/>
+      <xsd:maxLength value="28"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProcessingCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateYYMMDDhhmmssType">
+    <xsd:restriction base="xsd:dateTime"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateMMDDhhmmssType">
+    <xsd:restriction base="xsd:dateTime"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateYYMMDDType">
+    <xsd:restriction base="xsd:date"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateYYMMType">
+    <xsd:restriction base="xsd:date"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="DateMMDDType">
+    <xsd:restriction base="xsd:date"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="AmountType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MidAmountType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="16"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LargeAmountsType">
+    <xsd:restriction base="xsd:double">
+      <xsd:length value="24"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FeeAmountType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+ <xsd:simpleType name="LargeFeeAmountType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="84"/>
+    </xsd:restriction>
+  </xsd:simpleType> 
+  <xsd:simpleType name="AdditionalAmountsType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="60"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LargestAmountsType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="204"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ConversionRateType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SystemsTraceAuditType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TypeOfMerchantType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CountryCodeType">
+    <xsd:restriction base="xsd:positiveInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PointOfServiceDataCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardSequenceNumberType">
+    <xsd:restriction base="xsd:positiveInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FunctionCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MessageReasonCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardAcceptorBusinessCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ApprovalCodeLengthType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReconciliationIndicatorType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AcquirerReferenceDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="99"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="InstitutionIdentificationCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:maxLength value="11"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Track1DataType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="76"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Track2DataType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="37"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Track3DataType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="104"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RetrievalReferneceNumberType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ApprovalCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ActionCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ServiceCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardAcceptorTerminalIdentificationType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardAcceptorIdentificationCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="15"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardAcceptorNameLocationType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="99"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CardIssuerReferenceDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="99"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AdditionalResponseDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="99"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AdditionalDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CurrencyCodeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PINDataType">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SecurityRelatedControlInformationType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="24"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ICCardSystemRelatedDataType">
+    <xsd:restriction base="xsd:base64Binary">
+      <xsd:maxLength value="128"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OriginalDataElementsType">
+    <xsd:restriction base="xsd:nonNegativeInteger"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="AuthLifecycleCodeType">
+    <xsd:restriction base="xsd:integer">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AuthAgentInstitutionIdentificationCodeType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:maxLength value="11"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TransportDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DataRecordType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MessageAuthCodeFieldType">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ExtendedPaymentDataType">
+    <xsd:restriction base="xsd:integer">
+      <xsd:length value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MessageNumberType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SumNumberType">
+    <xsd:restriction base="xsd:nonNegativeInteger">
+      <xsd:length value="10"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="mtiHeader" type="iso8583:HeaderType"/>
+  <xsd:element name="bitmapPrimary" type="iso8583:BitMapType"/>
+  <xsd:element name="bitmapSecondary" type="iso8583:BitMapType"/>
+  <xsd:element name="primaryAccountNumber" type="iso8583:AccountNumberType"/>
+  <xsd:element name="processingCode" type="iso8583:ProcessingCodeType"/>
+  <xsd:element name="transactionAmount" type="iso8583:AmountType"/>
+  <xsd:element name="reconcilliationAmount" type="iso8583:AmountType"/>
+  <xsd:element name="cardHolderBillingAmount" type="iso8583:AmountType"/>
+  <xsd:element name="transmissionDateTime" type="iso8583:DateMMDDhhmmssType"/>
+  <xsd:element name="cardHolderBillingFreeAmount" type="iso8583:FeeAmountType"/>
+  <xsd:element name="reconciliationConversionRate"
+               type="iso8583:ConversionRateType"/>
+  <xsd:element name="cardHolderBillingConversionRate"
+               type="iso8583:ConversionRateType"/>
+  <xsd:element name="systemsTraceAuditNumber"
+               type="iso8583:SystemsTraceAuditType"/>
+  <xsd:element name="localTransactionDateTime"
+               type="iso8583:DateYYMMDDhhmmssType"/>
+  <xsd:element name="effectiveDtae" type="iso8583:DateYYMMType"/>
+  <xsd:element name="expirationDate" type="iso8583:DateYYMMType"/>
+  <xsd:element name="settlementDate" type="iso8583:DateYYMMDDType"/>
+  <xsd:element name="conversionDate" type="iso8583:DateMMDDType"/>
+  <xsd:element name="captureDate" type="iso8583:DateMMDDType"/>
+  <xsd:element name="typeOfMerchant" type="iso8583:TypeOfMerchantType"/>
+  <xsd:element name="acquiringInstitutionCountryCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="primaryAccountNumberCountryCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="forwardingInstitutionCountryCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="pointOfServiceDataCode"
+               type="iso8583:PointOfServiceDataCodeType"/>
+  <xsd:element name="cardSequenceNumber" type="iso8583:CardSequenceNumberType"/>
+  <xsd:element name="functionCode" type="iso8583:FunctionCodeType"/>
+  <xsd:element name="messageReasonCode" type="iso8583:MessageReasonCodeType"/>
+  <xsd:element name="cardAcceptorBusinessCode"
+               type="iso8583:CardAcceptorBusinessCodeType"/>
+  <xsd:element name="approvalCodeLength" type="iso8583:ApprovalCodeLengthType"/>
+  <xsd:element name="reconciliationDate" type="iso8583:DateYYMMDDType"/>
+  <xsd:element name="reconciliationIndicator"
+               type="iso8583:ReconciliationIndicatorType"/>
+  <xsd:element name="originalAmounts" type="iso8583:LargeAmountsType"/>
+  <xsd:element name="acquirerReferenceData"
+               type="iso8583:AcquirerReferenceDataType"/>
+  <xsd:element name="acquirerInstitutionIdentificationCode"
+               type="iso8583:InstitutionIdentificationCodeType"/>
+  <xsd:element name="forwardingInstitutionIdentificationCode"
+               type="iso8583:InstitutionIdentificationCodeType"/>
+  <xsd:element name="extendedAccountNumber"
+               type="iso8583:ExtendedAccountNumberType"/>
+  <xsd:element name="track2Data" type="iso8583:Track2DataType"/>
+  <xsd:element name="track3Data" type="iso8583:Track3DataType"/>
+  <xsd:element name="retrievalReferneceNumber"
+               type="iso8583:RetrievalReferneceNumberType"/>
+  <xsd:element name="approvalCode" type="iso8583:ApprovalCodeType"/>
+  <xsd:element name="actionCode" type="iso8583:ActionCodeType"/>
+  <xsd:element name="serviceCode" type="iso8583:ServiceCodeType"/>
+  <xsd:element name="cardAcceptorTerminalIdentification"
+               type="iso8583:CardAcceptorTerminalIdentificationType"/>
+  <xsd:element name="cardAcceptorIdentificationCode"
+               type="iso8583:CardAcceptorIdentificationCodeType"/>
+  <xsd:element name="cardAcceptorNameLocation"
+               type="iso8583:CardAcceptorNameLocationType"/>
+  <xsd:element name="additionalResponseData"
+               type="iso8583:AdditionalResponseDataType"/>
+  <xsd:element name="track1Data" type="iso8583:Track1DataType"/>
+  <xsd:element name="nationalAdditionalData" type="iso8583:AdditionalDataType"/>
+  <xsd:element name="privateAdditionalData" type="iso8583:AdditionalDataType"/>
+  <xsd:element name="transactionCurrencyCode" type="iso8583:CountryCodeType"/>
+  <xsd:element name="reconciliationCurrencyCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="cardHolderBillinCurrencyCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="pinData" type="iso8583:PINDataType"/>
+  <xsd:element name="securityRelatedControlInformation"
+               type="iso8583:SecurityRelatedControlInformationType"/>
+  <xsd:element name="additionalAmountsType"
+               type="iso8583:AdditionalAmountsType"/>
+  <xsd:element name="authLifecycleCodeType"
+               type="iso8583:AuthLifecycleCodeType"/>
+  <xsd:element name="authAgentInstitutionIdentificationCode"
+               type="iso8583:AuthAgentInstitutionIdentificationCodeType"/>
+  <xsd:element name="transportData" type="iso8583:TransportDataType"/>
+  <xsd:element name="messageAuthCodeField"
+               type="iso8583:MessageAuthCodeFieldType"/>
+  <xsd:element name="originalFeesAmounts" type="iso8583:LargestAmountsType"/>
+  <xsd:element name="extendedPaymentData"
+               type="iso8583:ExtendedPaymentDataType"/>
+  <xsd:element name="receivingInstitutionCountryCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="settlementInstitutionCountryCode"
+               type="iso8583:CountryCodeType"/>
+  <xsd:element name="messageNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="dataRecord" type="iso8583:DataRecordType"/>
+  <xsd:element name="actionDate" type="iso8583:DateYYMMDDType"/>
+  <xsd:element name="creditsNumber" type="iso8583:SumNumberType"/>
+  <xsd:element name="creditsReversalNumber" type="iso8583:SumNumberType"/>
+  <xsd:element name="debitsNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="debitsReversalNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="transferNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="transferReversalNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="inquiriesNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="inquiriesReversalNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="paymentsNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="paymentsReversalNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="feesCollectionNumber" type="iso8583:MessageNumberType"/>
+  <xsd:element name="creditsAmount" type="iso8583:MidAmounType"/>
+  <xsd:element name="creditsReversalAmount" type="iso8583:MidAmounType"/>
+  <xsd:element name="debitsAmount" type="iso8583:MidAmounType"/>
+<xsd:element name="debitsReversalAmount" type="iso8583:MidAmounType"/>
+<xsd:element name="authorizationsReversalNumber" type="iso8583:MessageNumberType"/>
+<xsd:element name="transactionDestinationInstitutionCountryCode" type="iso8583:CountryCodeType"/>
+<xsd:element name="transactionOriginatorInstitutionCountryCode" type="iso8583:CountryCodeType"/>
+<xsd:element name="transactionDestinationInstitutionIdentificationCode" type="iso8583:InstitutionIdentificationCodeType"/>
+<xsd:element name="transactionOriginatorInstitutionIdentificationCode" type="iso8583:InstitutionIdentificationCodeType"/>
+  
+  <xsd:element name="cardIssuerReferenceData" type="iso8583:CardIssuerReferenceDataType"/>
+
+<xsd:simpleType name="KeyManagementDataType">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:maxLength value="999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+ <xsd:element name="KeyManagementData" type="iso8583:KeyManagementDataType"/>
+<xsd:element name="amountReconciliation" type="iso8583:MidAmountType"/>
+  <xsd:simpleType name="PayeeType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="25"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+<xsd:element name="settlementInstitutionIdentificationCode" type="iso8583:InstitutionIdentificationCodeType"/>
+<xsd:element name="receivingInstitutionIdentificationCode" type="iso8583:InstitutionIdentificationCodeType"/>
+  <xsd:simpleType name="FileNameType">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+<xsd:element name="fileName" type="iso8583:FileNameType"/>
+<xsd:element name="accountIdentification1" type="iso8583:ExtendedAccountNumberType"/>
+<xsd:element name="accountIdentification2" type="iso8583:ExtendedAccountNumberType"/>
+  <xsd:simpleType name="TransactionDescriptionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="24"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+<xsd:element name="transactionDescription" type="iso8583:TransactionDescriptionType"/>
+<xsd:element name="creditsChargebackAmount" type="iso8583:MidAmountType"/>
+<xsd:element name="debitsChargebackAmount" type="iso8583:MidAmountType"/>
+<xsd:element name="debitsChargebackNumber" type="iso8583:SumNumberType"/>
+<xsd:element name="creditsChargebackNumber" type="iso8583:SumNumberType"/>
+<xsd:element name="creditsFeeAmounts" type="iso8583:LargeFeeAmountType"/>
+<xsd:element name="debitsFeeAmounts" type="iso8583:LargeFeeAmountType"/>
+<xsd:element name="messageAuthCode" type="iso8583:MessageAuthCodeFieldType"/>
+    
+  
+</xsd:schema>

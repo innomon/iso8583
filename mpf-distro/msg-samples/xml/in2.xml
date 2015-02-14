@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ns0:Iso8583 xmlns:ns0='http://in.org.mpf/iso8583/v01' >
+<ns0:MTI>0910</ns0:MTI>
+<ns0:bitMap>{0, 1, 2, 3, 4, 5, 6, 128}</ns0:bitMap>
+<ns0:primaryAccountNumber>345</ns0:primaryAccountNumber>
+<ns0:processingCode>000000000234</ns0:processingCode>
+<ns0:transactionAmount>000000000333</ns0:transactionAmount>
+<ns0:reconciliationAmount>000000000567</ns0:reconciliationAmount>
+<ns0:cardHolderBillingAmount>000000003456</ns0:cardHolderBillingAmount>
+<ns0:messageAuthCodeField>1234</ns0:messageAuthCodeField>
+</ns0:Iso8583>
+

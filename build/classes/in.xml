@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ab:InIso8583   xmlns:ab='http://in.innomon/iso8583/v01' >
+    <ab:MTI>0910</ab:MTI>
+    <ab:primaryAccountNumber>123</ab:primaryAccountNumber>
+    <ab:messageAuthCodeField>12345678</ab:messageAuthCodeField>
+</ab:InIso8583>
