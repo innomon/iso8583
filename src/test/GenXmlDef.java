@@ -3,7 +3,7 @@
  */
 package test;
 
-import in.org.mpf.parser.BinMessageTokenizer;
+import in.innomon.iso8583.parser.BinMessageTokenizer;
 
 
 

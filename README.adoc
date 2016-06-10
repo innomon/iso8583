@@ -1,0 +1,31 @@
+= ISO8583 Java Parser
+
+A minimalist Java parser for use of IMPS Mobile Payment implementation. 
+
+The code has been designed to run on mobile as well as server side. 
+ 
+http://www.npci.org.in/[NPCI], backbone infrastructure implements the 1987 version of the standard.
+
+The ISO8583 message header contains the message type identifier.
+
+The message type identifier is a four-digit numeric field.
+
+The first position is set to numeric 0 in case of 1987 version. The numeric 2, in second position indicates it's a financial message.
+The third position is set to 0 for Request and 1 for Response.
+
+The zero value in the fourth field indicates acquirer. 
+
+Thus the message header value of 0200, means that the it is a 1987 version, Financial Request message from an acquirer.
+
+.UPI and ISO8583 relationship
+  
+The UPI (Unified Payment Interface) is specified by NPCI, see the http://www.npci.org.in/UPI_Documents.aspx[UPI Specs].  
+
+UPI is XML over `Https` protocol, that is implemented by NPCI as well as other Payment Service Providers. 
+
+NPCI implements this API by mapping the payloads into ISO8583 0200/0210, payment request/response, messages and passing it through the existing the NPCI infrastructure.
+
+== Version Changes
+
+* Changed license to UPL
+* Refactored the class paths

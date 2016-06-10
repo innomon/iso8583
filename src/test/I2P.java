@@ -3,8 +3,8 @@
   */
 package test;
 
-import in.org.mpf.iso8583.dict.MessageTokenizer;
-import in.org.mpf.parser.BinMessageTokenizer;
+import in.innomon.iso8583.dict.MessageTokenizer;
+import in.innomon.iso8583.parser.BinMessageTokenizer;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;

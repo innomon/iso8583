@@ -3,11 +3,11 @@
  */
 package test;
 
-import in.org.mpf.iso8583.dict.FieldInfo;
-import in.org.mpf.iso8583.dict.FieldName2Index;
-import in.org.mpf.iso8583.dict.GlobalFieldInfoDict;
-import in.org.mpf.iso8583.dict.MessageTokenizer;
-import in.org.mpf.parser.BinMessageTokenizer;
+import in.innomon.iso8583.dict.FieldInfo;
+import in.innomon.iso8583.dict.FieldName2Index;
+import in.innomon.iso8583.dict.GlobalFieldInfoDict;
+import in.innomon.iso8583.dict.MessageTokenizer;
+import in.innomon.iso8583.parser.BinMessageTokenizer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

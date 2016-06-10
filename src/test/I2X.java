@@ -5,7 +5,7 @@
 package test;
 
 
-import in.org.mpf.iso8583.xml.Iso8583ToXml;
+import in.innomon.iso8583.xml.Iso8583ToXml;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;

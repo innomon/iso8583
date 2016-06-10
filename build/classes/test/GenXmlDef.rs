@@ -1,2 +1,0 @@
-test.GenEmpty
-test.GenXmlDef

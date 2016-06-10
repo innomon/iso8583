@@ -3,8 +3,8 @@
  */
 package test;
 
-import in.org.mpf.iso8583.dict.FieldInfo;
-import in.org.mpf.iso8583.dict.GlobalFieldInfoDict;
+import in.innomon.iso8583.dict.FieldInfo;
+import in.innomon.iso8583.dict.GlobalFieldInfoDict;
 import java.util.ArrayList;
 
 /**
